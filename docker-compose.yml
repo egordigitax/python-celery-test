@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  rabbit:
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      - 5672:5672
+    network_mode: host
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    network_mode: host
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
